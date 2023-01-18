@@ -1,0 +1,15 @@
+An implementation of an Enigma machine in the object oriented language C.
+
+This program is an exercise in writing a program in C that uses classes as a
+means of implementing object oriented programming. As of now, all members
+are public. Private members could be easily implemented using forward decla-
+rations, but that wasn't neccessary here.
+
+This program is based on the video series "Coding the Enigma machine" from
+https://www.youtube.com/watch?v=sbm2dmkmqgQ
+
+The Python source code I typed in from the videos is found in python/. As
+fas as I can see, the original author didn't release it under any particular
+license. So I'm providing it as is. For information about licensing, consult
+the author.
+
