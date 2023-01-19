@@ -89,8 +89,8 @@ int main(int argc, char **argv) {
 	el_class_enigma *ENIGMA;
 	el_class_keyboard *KB;
 	el_class_plugboard *PB;
-	el_class_rotor *ROT[3] = { R1, R2, R3 };
-	el_class_reflector *RE = RB;
+	el_class_rotor *ROT[3] = { NULL, NULL, NULL };
+	el_class_reflector *RE = NULL;
 
 	char *key = NULL, *rotors = NULL, *rings = NULL, *reflector = NULL, *plugs = NULL, *message = NULL;
 	char *ciphertext, cipherchar, input;
@@ -121,7 +121,8 @@ int main(int argc, char **argv) {
 		PB = el_plugboard_new(plugs, &status);
 		if(status != EL_OK) return usage(argv[0]);
 	} else {
-		PB = el_plugboard_new("", &status);
+		fprintf(stderr, "Leaving plugs unplugged...\n");
+		PB = el_plugboard_new("AABBCCDD", &status);
 	}
 
 	if(rotors != NULL) {
@@ -138,6 +139,11 @@ int main(int argc, char **argv) {
 			else if(rotors[i] == '8') ROT[i] = R8;
 			else return usage(argv[0]);
 		}
+	} else {
+		fprintf(stderr, "Setting rotors to '123'...\n");
+		ROT[0] = R1;
+		ROT[1] = R2;
+		ROT[2] = R3;
 	}
 
 	if(reflector != NULL) {
@@ -150,6 +156,9 @@ int main(int argc, char **argv) {
 		else if(!strcmp(reflector, "BETA")) RE = BETA;
 		else if(!strcmp(reflector, "GAMMA")) RE = GAMMA;
 		else return usage(argv[0]);
+	} else {
+		fprintf(stderr, "Setting reflector to 'B'...\n");
+		RE = RB;
 	}
 
 	ENIGMA = el_enigma_new(KB, PB, RE, ROT[0], ROT[1], ROT[2], &status);
@@ -157,14 +166,20 @@ int main(int argc, char **argv) {
 	if(key != NULL) {
 		fprintf(stderr, "Setting key...\n");
 		ENIGMA->set_key(ENIGMA, key, &status);
-		if(status != EL_OK) return usage(argv[0]);
+	} else {
+		fprintf(stderr, "Setting key to 'AAA'...\n");
+		ENIGMA->set_key(ENIGMA, "AAA", &status);
 	}
+	if(status != EL_OK) return usage(argv[0]);
 
 	if(rings != NULL) {
 		fprintf(stderr, "Setting rings...\n");
 		ENIGMA->set_rings(ENIGMA, rings[0], rings[1], rings[2], &status);
-		if(status != EL_OK) return usage(argv[0]);
+	} else {
+		fprintf(stderr, "Setting rings to 'AAA'...\n");
+		ENIGMA->set_rings(ENIGMA, 'A', 'A', 'A', &status);
 	}
+	if(status != EL_OK) return usage(argv[0]);
 
 	if(message != NULL) {
 		ciphertext = ENIGMA->encipher_string(ENIGMA, message, &status);
