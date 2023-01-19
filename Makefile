@@ -4,7 +4,7 @@ BIN=bin
 OBJ=objects
 
 CC=gcc
-CFLAGS=-I$(INC) -O0 -ggdb
+CFLAGS=-I$(INC) -O0 -ggdb -Wall -pedantic
 
 OBJECTS= \
 $(OBJ)/enigma.o \
